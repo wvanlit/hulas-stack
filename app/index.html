@@ -6,13 +6,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <p>HULAS Stack</p>
+    <main class="p-4 h-full w-96 mx-auto flex flex-col">
+      <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">HULAS Stack</h2>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary" 
+              hx-post="/api/hello" 
+              hx-swap="outerHTML"
+              hx-target="closest div"
+            >
+              Click Me
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
     
-    <button hx-post="/api/hello" hx-swap="outerHTML">
-      Click Me
-    </button>
-
 </body>
 </html>

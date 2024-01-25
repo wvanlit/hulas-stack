@@ -14,6 +14,18 @@ This initializes the docker container and launches the HULAS stack application.
 
 Your application should now be accessible at http://localhost:8080
 
+## TODO List
+- [x] Add some styling using DaisyUI
+    - [x] Setup using Play CDN
+    - [ ] Setup CLI tool with `--watch`
+- [ ] Build out a library of utilities for apps
+    - [ ] Possibly HTML builder / components
+- [ ] Allow requesting `.html` files without specifing `[file].html` for better MPAs
+- [ ] Build an example application using HULAS
+- [ ] Develop hulas CLI tool
+    - [ ] hulas create
+    - [ ] hulas build
+    - [ ] hulas run
 
 ## Attribution
 
