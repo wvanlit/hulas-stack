@@ -2,7 +2,7 @@
 
 ![Icon](./docs/hula-hoop.png)
 
-> Web stack based on **H**tmx, **U**nix, **L**ua, **A**i (Chat-GPT) and **S**qlite
+A "modern" web stack based on **H**tmx, **U**nix, **L**ua, **A**i (Chat-GPT) and **S**qlite
 
 ## How to run 
 
