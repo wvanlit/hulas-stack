@@ -1,31 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>HULAS Stack</title>
+<html lang="en" data-theme="business">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+<head>
+  <title>HULAS Stack</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <main class="p-4 h-full w-96 mx-auto flex flex-col">
-      <div class="card w-96 bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">HULAS Stack</h2>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary" 
-              hx-post="/api/hello" 
-              hx-swap="outerHTML"
-              hx-target="closest div"
-            >
-              Click Me
-            </button>
-          </div>
+
+<body hx-boost="true">
+  <main class="mt-12 container p-4 h-full mx-auto max-w-screen-sm flex flex-col shadow-sm">
+    <div class="text-center">
+      
+      <h2 class="text-4xl md:text-6xl">todos</h2>
+      <div class="text-2xl md:text-3xl m-4">
+      <div class="divider"></div> 
+
+      
+      <ul class="text-left mx-16 my-6" id="todos">
+          <div hx-get="/api/todos" hx-swap="outerHTML" hx-trigger="load"></div> 
+        </ul>
+        <form
+          hx-post="/api/todos"
+          hx-target="#todos"
+          hx-swap="innerHTML"
+          hx-trigger="submit"
+          hx-on::after-request="this.reset()"          
+        >
+          <input 
+            name="todo-item"
+            class="input input-secondary sm:text-3xl w-[80%] py-4 px-12" 
+            type="text" 
+            placeholder="What needs to be done?" 
+          />
+        </form>
+        <div class="divider"></div> 
+        <div class="text-right w-[90%]" hx-confirm="Are you sure?">
+          <button
+          class="btn btn-error btn-sm"
+          hx-delete="/api/clear"
+          hx-target="#todos"
+          hx-swap="innerHTML swap:500ms settle:100ms">
+          clear done
+        </button>
         </div>
       </div>
-    </main>
-    
+    </div>
+  </main>
+
 </body>
+
 </html>

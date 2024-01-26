@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +13,7 @@ import (
 const APP_DIR = "./app"
 const PORT = ":8080"
 
-var logger *log.Logger
+var logger = log.New(log.Writer(), "[HULAS server] ", log.LstdFlags)
 
 func serveLuaScripts(w http.ResponseWriter, req *http.Request) {
 	script := urlToLuaScript(req)
@@ -22,7 +23,16 @@ func serveLuaScripts(w http.ResponseWriter, req *http.Request) {
 		http.NotFound(w, req)
 	}
 
-	output := runScript(script)
+	// Read the request body
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		logger.Println("Error reading request body:", err)
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+	defer req.Body.Close()
+
+	output := runScript(script, req.Method, string(body))
 
 	if output == "" {
 		http.Error(w, "Error executing script", http.StatusInternalServerError)
@@ -44,8 +54,14 @@ func fileExists(path string) bool {
 	return err == nil
 }
 
-func runScript(script string) string {
+func runScript(script string, method string, body string) string {
 	cmd := exec.Command("luajit", script)
+
+	cmd.Env = []string{
+		"REQUEST_METHOD=" + method,
+		"REQUEST_BODY=" + strings.TrimSpace(body),
+	}
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		logger.Println("Error executing script '", script, "':", err)
@@ -66,8 +82,6 @@ func printFileTree() {
 }
 
 func main() {
-	logger = log.New(log.Writer(), "[HULAS server] ", log.LstdFlags)
-
 	logger.Println("Starting HULAS...")
 	logger.Println("Running on ", "http://localhost"+PORT)
 
@@ -75,6 +89,8 @@ func main() {
 	logger.Println("Serving files from CWD", cwd)
 
 	printFileTree()
+
+	runScript(APP_DIR+"/../lib/startup.lua", "GET", "")
 
 	fileServer := http.FileServer(http.Dir(APP_DIR))
 
