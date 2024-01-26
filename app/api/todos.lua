@@ -1,4 +1,4 @@
-require "app/prelude"
+require "lib/prelude"
 
 if REQUEST_METHOD == "POST" then
     local content = ParseQueryString(REQUEST_BODY)["todo-item"]

@@ -1,4 +1,4 @@
-require "app/prelude"
+require "lib/prelude"
 
 DATABASE:exec [[
     DELETE FROM todos WHERE done = 1;
